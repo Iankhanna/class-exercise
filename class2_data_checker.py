@@ -1,6 +1,7 @@
 import argparse
 import csv
 import sys
+import logging
 from pathlib import Path
 
 
@@ -20,6 +21,25 @@ def check_data(filename):
 
     return header, data, missing_rows
 
+import logging
+
+# Set up logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)-8s %(message)s",
+    datefmt="%H:%M:%S"
+)
+
+# Create a module-level logger
+logger = logging.getLogger(__name__)
+
+x = 42
+
+logger.info("Loading file...")
+logger.debug("Processing row 1...")
+logger.debug(f"Value is {x}")
+logger.info("Done!")
+
 # TODO 1: Create an ArgumentParser
 # Description: "Check the quality of a CSV file."
 parser = argparse.ArgumentParser(description="Analyze data file")
@@ -36,6 +56,7 @@ parser.add_argument("--input","-i",required=True,help="Path to input CSV file")
 # Default: "data_quality.txt"
 # Help: "Output report filename"
 parser.add_argument("--output","-o",default="results.txt",help="Output file path")
+DEBUG Arguments parsed: filename=students.csv
 
 # TODO 4: Add a boolean flag:
 # Long form: --verbose
@@ -46,18 +67,21 @@ parser.add_argument("--verbose", "-v",action="store_true",help="Print detailed i
 
 # TODO 5: Parse the command-line arguments
 args = parser.parse_args()
+if args.verbose:
+    logger.setLevel(logging.DEBUG)
 
 # Check if the file exists 
 p = Path(args.input)
 if not p.is_file():
-    print(f"File not found: '{args.input}'")
+    logger.error(f"File not found: '{args.input}'")
     sys.exit(1)
-
-print(f"File validated: '{args.input}'")
+    
+logger.info(f"File validated: '{args.input}'")
 
 # Check the data
 #header, data, missing_rows = check_data(args.filename) # args.input
 header, data, missing_rows = check_data(args.input)
+DEBUG Loading data from: students.csv
 
 # Save the report
 with open(args.output, "w") as f:

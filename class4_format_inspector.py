@@ -67,8 +67,11 @@ def main():
     # 2. Use the / operator to build the CSV, JSON, and YAML paths.
     # 3. Call each inspection function using the matching path.
     # 4. Call inspect_env() without an argument.
-    pass
-
+    data_dir = Path("data")
+    filepath_csv = data_dir / "sample.csv"
+    filepath_json = data_dir / "sample.csv"
+    filepath_yaml = data_dir / "sample.csv"
+    
 
 if __name__ == "__main__":
     main()
